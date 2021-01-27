@@ -66,7 +66,11 @@ select emp_id 사원번호,
             emp_name 사원명,
             rpad(substr(emp_no,1,8),14,'*') 주민번호,
             decode(substr(emp_no, 8, 1), '1', '남', '2', '여', '3' , '남', '4' , '여') 성별,
-            extract(year from sysdate) - ('19'||substr(emp_no, 1, 2)) + 1  현재나이
+            extract(year from sysdate) - 
+            case
+                when substr(emp_no,1,2) > 20 then '19'||substr(emp_no,1,2)
+                when substr(emp_no,1,2) < 20 then '20'||substr(emp_no,1,2)
+            end + 1  현재나이
 from employee;
 /*
 7. 직원명, 직급코드, 연봉(원) 조회
