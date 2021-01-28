@@ -17,12 +17,16 @@ order by 1;
 select class_no 과목,
             count(*)
 from tb_class_professor
-group by class_no;
+group by class_no
+having count(*) >= 2;
 
 -- 4. 학과별로 과목을 구분했을때, 과목구분이 "전공선택"에 한하여
 -- 과목수가 10개 이상인 행의 학과번호, 과목구분(class_type), 과목수를 조회(전공선택만 조회)
-select department_no,
-            count(*)
+select department_no 학과번호,
+            class_type 과목구분,
+            count(*) 과목수
 from tb_class
-where class_type = "전공선택"
-group by department_no;
+where class_type = '전공선택'
+group by department_no, class_type
+having count(*) >= 10
+order by 3;
