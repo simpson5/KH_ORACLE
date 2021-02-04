@@ -23,9 +23,9 @@ select G.term_no 학기,
             C.class_name 수업명,
             G.point 점수
 from tb_student S
-    join tb_grade G
+    left join tb_grade G
         on S.student_no = G.student_no
-    join tb_class C
+    left join tb_class C
         on G.class_no = C.class_no
 where S.student_name like '송박선'
 order by 1;
@@ -34,7 +34,7 @@ order by 1;
 --같은 학생이 여러학기에 걸쳐 같은 과목을 이수한 데이터 있으나, 전체 평점으로 계산함.
 select S.student_no,
             S.student_name,
-            trunc(sum(G.point))
+            trunc(avg(G.point), 1)
 from tb_student S
     join tb_grade G
         on S.student_no = G.student_no
@@ -42,10 +42,15 @@ group by S.student_no, S.student_name;
 
 --5. 교수번호, 교수명, 담당학생명수 조회
 -- 단, 5명 이상을 담당하는 교수만 출력
-select P.professor_no, P.professor_name,
-            count(*)
+select P.professor_no 교수번호, P.professor_name 교수명,
+            count(*) 담당학생명수
 from tb_professor P
     join tb_student S
         on P.professor_no = S.coach_professor_no
 group by P.professor_no, P.professor_name
-having count(*) >= 5;
+having count(*) >= 5
+order by 3;
+
+select *
+from tb_student
+where coach_professor_no = 'P102'
