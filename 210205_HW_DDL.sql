@@ -139,7 +139,7 @@ from tb_grade
 where substr(term_no,1,4) > 2006
 order by 1 desc;
 
-create view view_class_cnt
+create or replace view view_class_cnt
 as
 select class_no 과목번호,
             (
@@ -151,8 +151,11 @@ select class_no 과목번호,
 from tb_grade G
 where substr(term_no,1,4) > 2004
 group by class_no
-order by 누적수강생수 desc;
+order by 누적수강생수 desc, 과목번호;
+
+select *
+from view_class_cnt;
 
 select *
 from view_class_cnt
-where rownum between 1 and 3;
+where rownum between 1 and 5;
